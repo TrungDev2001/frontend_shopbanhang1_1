@@ -40,9 +40,7 @@ class HomeController extends Controller
         $categories = $this->category->where('active', 1)->where('parent_id', 0)->get();
         $brands = $this->brand->where('active', 0)->latest()->get();
         $ads = $this->ads->where('active', 0)->latest()->first();
-        $price_min = $products->min('price');
-        $price_max = $products->max('price');
-        return view('home.home', compact('sliders', 'products', 'productHots', 'categories', 'brands', 'ads', 'price_min', 'price_max'));
+        return view('home.home', compact('sliders', 'products', 'productHots', 'categories', 'brands', 'ads'));
     }
 
     /**

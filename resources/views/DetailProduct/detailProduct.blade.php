@@ -1,5 +1,5 @@
 <?php
-$base_url = 'http://localhost:8000/';
+	$base_url = config('base_url.url_backend.url');
 ?>
 @extends('layouts.master')
 

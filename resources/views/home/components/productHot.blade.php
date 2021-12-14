@@ -1,5 +1,5 @@
 @php
-	$base_url = 'http://localhost:8000/';
+	$base_url = config('base_url.url_backend.url');
 @endphp
 <div class="recommended_items"><!--recommended_items-->
 	<h2 class="title text-center">Sản phẩm hot</h2>

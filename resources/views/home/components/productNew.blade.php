@@ -1,5 +1,5 @@
 <?php
-$base_url = 'http://localhost:8000/';
+	$base_url = config('base_url.url_backend.url');
 ?>
 <div class="features_items"><!--features_items-->
     <h2 class="title text-center">Sản phẩm mới</h2>

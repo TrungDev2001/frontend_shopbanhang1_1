@@ -2,7 +2,7 @@
 @if (session()->has('cart'))
 @foreach ($carts as $keyCart => $cart)
 @php
-    $base_url = 'http://localhost:8000/';
+	$base_url = config('base_url.url_backend.url');
     $totalPrice = 0;
     $totalPrice +=  $cart['price'] * $cart['quantity'];
 @endphp
