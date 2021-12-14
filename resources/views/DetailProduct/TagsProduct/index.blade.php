@@ -63,15 +63,18 @@
 								</div>
 							</div>
 						@endforeach --}}
-					
-						<ul class="pagination">
-							{{-- <li class="active"><a href="">1</a></li>
+						<div class="clearfix">...</div>
+						{{-- <ul class="pagination">
+							<li class="active"><a href="">1</a></li>
 							<li><a href="">2</a></li>
 							<li><a href="">3</a></li>
-							<li><a href="">&raquo;</a></li> --}}
+							<li><a href="">&raquo;</a></li>
 							{{ $products->links() }}
-						</ul>
-						
+						</ul> --}}
+						<div class="paginate_html" style="display: grid;">
+							@include('components.paginate')
+						</div>
+											
 					</div><!--features_items-->
 				</div>
 			</div>

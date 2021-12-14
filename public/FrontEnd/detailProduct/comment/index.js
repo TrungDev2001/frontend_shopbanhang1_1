@@ -10,6 +10,9 @@ function getComment() {
                 $('#comments').html(response.comments_html);
                 $('#comments_html_paginate').html(response.comments_html_paginate);
                 $('.count_comment').html(response.count_comments_cha);
+            } else {
+                $('.img-loading-content').hide();
+                $('.count_comment').html(0);
             }
         }
     });

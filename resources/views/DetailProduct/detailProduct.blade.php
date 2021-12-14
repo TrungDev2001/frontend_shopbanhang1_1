@@ -12,10 +12,10 @@
 @endsection
 @section('ShareFB')
 <meta property="og:url"           content="{{ $url_DetailProduct }}" />
-<meta property="og:type"          content="website" />
+<meta property="og:type"          content="Shopping" />
 <meta property="og:title"         content="{{ $product->name }}" />
-<meta property="og:description"   content="{{ $product->description }}" />
-<meta property="og:image"         content="{{ $product->feature_image_path }}" />
+<meta property="og:description"   content="{!! $product->description !!}" />
+<meta property="og:image"         content="{{ $base_url.$product->feature_image_path }}" />
 @endsection
 
 @section('content')
@@ -195,7 +195,7 @@
 										<li><a href=""><i class="fa fa-calendar-o"></i>{{ date('d/m/Y', strtotime(substr(date('Y-m-d H:i:s'), 0, 10))) }}</a></li>
 									</ul>
 
-									<div class="fb-comments" data-href="{{ $url_DetailProduct }}" data-width="600" data-numposts="20"></div>
+									<div class="fb-comments" data-href="{{ $url_DetailProduct }}" data-width="800" data-numposts="10"></div>
 
 									<p><b id="titleRating">Đánh giá sao cho sản phẩm:</b></p>
 									<div style="display: flex;">
@@ -254,9 +254,11 @@
 											<div class="product-image-wrapper">
 												<div class="single-products">
 													<div class="productinfo text-center">
-														<img style="height: 200px; object-fit: contain; object-position: left;" src="{{ $base_url.$productRelate->feature_image_path }}" alt="{{ $productRelate->feature_image_name }}" />
-														<h2>{{ number_format($productRelate->price, 0 ,',','.') }}đ</h2>
-														<p>{{ Str::words($productRelate->name,6) }}</p>
+														<a href="{{ route('ProductDetail', ['id' => $productRelate->id, 'slug' => $productRelate->slug]) }}">
+															<img style="height: 200px; object-fit: contain; object-position: left;" src="{{ $base_url.$productRelate->feature_image_path }}" alt="{{ $productRelate->feature_image_name }}" />
+															<h2>{{ number_format($productRelate->price, 0 ,',','.') }}đ</h2>
+															<p>{{ Str::words($productRelate->name,6) }}</p>
+														</a>
 														{{-- <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button> --}}
 														<div style="display: flex;">
 															<a data-url="{{ route('add_to_cart.index', ['id' => $product->id])}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
@@ -289,9 +291,11 @@
 											<div class="product-image-wrapper">
 												<div class="single-products">
 													<div class="productinfo text-center">
-														<img style="height: 200px; object-fit: contain; object-position: left;" src="{{ $base_url.$productRelate->feature_image_path }}" alt="{{ $productRelate->feature_image_name }}" />
-														<h2>{{ number_format($productRelate->price, 0 ,',','.') }}đ</h2>
-														<p>{{ Str::words($productRelate->name,6) }}</p>
+														<a href="{{ route('ProductDetail', ['id' => $productRelate->id, 'slug' => $productRelate->slug]) }}">
+															<img style="height: 200px; object-fit: contain; object-position: left;" src="{{ $base_url.$productRelate->feature_image_path }}" alt="{{ $productRelate->feature_image_name }}" />
+															<h2>{{ number_format($productRelate->price, 0 ,',','.') }}đ</h2>
+															<p>{{ Str::words($productRelate->name,6) }}</p>
+														</a>
 														{{-- <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button> --}}
 														<div style="display: flex;">
 															<a data-url="{{ route('add_to_cart.index', ['id' => $productRelate->id])}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>

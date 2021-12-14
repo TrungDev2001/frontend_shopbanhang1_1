@@ -48,7 +48,7 @@
 							<li><a href="">&raquo;</a></li>
 							{{ $products->links() }}
 						</ul> --}}
-						<div class="paginate_html">
+						<div class="paginate_html" style="display: grid;">
 							@include('components.paginate')
 						</div>
 

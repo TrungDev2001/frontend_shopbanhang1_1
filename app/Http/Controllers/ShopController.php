@@ -36,48 +36,7 @@ class ShopController extends Controller
         $category = $this->category->find($id);
         if ($request->ajax()) {
             if ($request->filter_product) {
-                // return $this->Filter_product_Traits($request->filter_product, $products);
-                if ($request->filter_product == 1) {
-                    $products = $this->product->where('category_id', $id)->where('active', 0)->orderBy('price', 'asc')->paginate(2);
-                    // $products = $products->sortBy('price');
-                    // $product_category_html = view('shop.category.components.data', compact('products'))->render();
-                    // return Response()->json([
-                    //     'status' => 200,
-                    //     'product_category_html' => $product_category_html,
-                    // ]);
-                } elseif ($request->filter_product == 2) {
-                    $products = $this->product->where('category_id', $id)->where('active', 0)->orderBy('price', 'desc')->paginate(2);
-                    // $products = $products->sortByDesc('price');
-                    // $product_category_html = view('shop.category.components.data', compact('products'))->render();
-                    // return Response()->json([
-                    //     'status' => 200,
-                    //     'product_category_html' => $product_category_html,
-                    // ]);
-                } elseif ($request->filter_product == 3) {
-                    $products = $this->product->where('category_id', $id)->where('active', 0)->orderBy('name', 'asc')->paginate(2);
-                    // $products = $products->sortBy('name');
-                    // $product_category_html = view('shop.category.components.data', compact('products'))->render();
-                    // return Response()->json([
-                    //     'status' => 200,
-                    //     'product_category_html' => $product_category_html,
-                    // ]);
-                } elseif ($request->filter_product == 4) {
-                    $products = $this->product->where('category_id', $id)->where('active', 0)->orderBy('name', 'desc')->paginate(2);
-                    // $products = $products->sortByDesc('name');
-                    // $product_category_html = view('shop.category.components.data', compact('products'))->render();
-                    // return Response()->json([
-                    //     'status' => 200,
-                    //     'product_category_html' => $product_category_html,
-                    // ]);
-                }
-
-                $product_category_html = view('shop.category.components.data', compact('products'))->render();
-                $paginate_html = view('components.paginate', compact('products'))->render();
-                return Response()->json([
-                    'status' => 200,
-                    'product_category_html' => $product_category_html,
-                    'paginate_html' => $paginate_html,
-                ]);
+                return $this->Filter_product_Traits($request->filter_product, $this->product, $id, 'category_id');
             }
             if ($request->price_range_min || $request->price_range_max) {
                 return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $products);
@@ -94,7 +53,7 @@ class ShopController extends Controller
         $brand = $this->brand->find($id);
         if ($request->ajax()) {
             if ($request->filter_product) {
-                return $this->Filter_product_Traits($request->filter_product, $products);
+                return $this->Filter_product_Traits($request->filter_product, $this->product, $id, 'brand_id');
             }
             if ($request->price_range_min || $request->price_range_max) {
                 return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $products);

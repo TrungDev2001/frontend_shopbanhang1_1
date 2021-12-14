@@ -115,8 +115,9 @@ class CommentController extends Controller
                 </div>
             ';
         }
+        $comments_html_paginate = '';
         if ($comments->lastPage() > 1) {
-            $comments_html_paginate = '<p id="getPaginateComment" data-lastPage="' . $comments->lastPage() . '" style="cursor: pointer;">Xem thêm các bình luận khác</p>';
+            $comments_html_paginate .= '<p id="getPaginateComment" data-lastPage="' . $comments->lastPage() . '" style="cursor: pointer;">Xem thêm các bình luận khác</p>';
         }
         $count_comments_total = count($comments) + $count_comment_childent_total;
         if ($comments_html != '') {

@@ -12,7 +12,7 @@
     <div class="tab-content">
         @foreach ($categories as $keyCP => $categoryP)
             <div class="tab-pane fade {{ $keyCP == 0 ? 'active in' : ''}}" id="{{$categoryP->slug}}" >
-                @foreach ($categoryP->Products->sortDesc()->take(4) as $categoryProduct)
+                @foreach ($categoryP->Products->where('active', 0)->sortDesc()->take(4) as $categoryProduct)
                     <div class="col-sm-3">
                         <div class="product-image-wrapper">
                             <div class="single-products">
