@@ -77,7 +77,8 @@
 							{{ $products->links() }}
 						</ul> --}}
 						<div class="paginate_html" style="display: grid;">
-							@include('components.paginate')
+							{{-- @include('components.paginate') --}}
+							{{ $products->links() }}
 						</div>
 					</div><!--features_items-->
 				</div>

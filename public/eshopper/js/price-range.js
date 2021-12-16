@@ -328,12 +328,15 @@
 						if (response.status == 200) {
 							$('#img-loading-content').css('display', 'none');
 							$('#data_product_category').html(response.product_category_html);
+							$('.paginate_html').html(response.paginate_html);
+							$('.paginate_html').attr('data-price_min', response.price_min);
+							$('.paginate_html').attr('data-price_max', response.price_max);
 						}
 					}
 				});
 			}
-			console.log(price_range_min);
-			console.log(price_range_max);
+			// console.log(price_range_min);
+			// console.log(price_range_max);
 			return false;
 		},
 

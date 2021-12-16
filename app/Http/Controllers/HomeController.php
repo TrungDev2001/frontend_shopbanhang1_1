@@ -32,7 +32,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $sliders = $this->slider->where('active', 0)->get();
         $products = $this->product->where('active', 0)->latest()->take(6)->get();
@@ -40,6 +40,18 @@ class HomeController extends Controller
         $categories = $this->category->where('active', 1)->where('parent_id', 0)->get();
         $brands = $this->brand->where('active', 0)->latest()->get();
         $ads = $this->ads->where('active', 0)->latest()->first();
+
+        if ($request->ajax()) {
+            $price_range_min = $request->price_range_min;
+            $price_range_max = $request->price_range_max;
+            $products = $this->product->where('active', 0)->whereBetween('price', [$price_range_min, $price_range_max])->latest()->take(6)->get();
+            $product_category_html = view('shop.category.components.data', compact('products'))->render();
+            return Response()->json([
+                'status' => 200,
+                'product_category_html' => $product_category_html,
+            ]);
+        }
+
         return view('home.home', compact('sliders', 'products', 'productHots', 'categories', 'brands', 'ads'));
     }
 

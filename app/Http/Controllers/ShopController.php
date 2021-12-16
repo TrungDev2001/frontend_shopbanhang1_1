@@ -39,7 +39,7 @@ class ShopController extends Controller
                 return $this->Filter_product_Traits($request->filter_product, $this->product, $id, 'category_id');
             }
             if ($request->price_range_min || $request->price_range_max) {
-                return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $products);
+                return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $this->product, $id, 'category_id');
             }
         }
         return view('shop.category.listProductCategory', compact('categories', 'brands', 'ads', 'products', 'category'));
@@ -56,7 +56,7 @@ class ShopController extends Controller
                 return $this->Filter_product_Traits($request->filter_product, $this->product, $id, 'brand_id');
             }
             if ($request->price_range_min || $request->price_range_max) {
-                return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $products);
+                return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $this->product, $id, 'brand_id');
             }
         }
         return view('shop.brand.listProductBrand', compact('categories', 'brands', 'ads', 'products', 'brand'));

@@ -58,11 +58,11 @@ class ProductDetailController extends Controller
 
         $url_DetailProduct = $request->url();
 
-        if (isset($product->ProductImages)) {
-            $nunber = $product->ProductImages->count();
-            // $productImages = $product->ProductImages->take($nunber - $nunber % 3)->sortBy('position');
-            $productImages = $product->ProductImages->sortBy('position');
-        }
+
+        $nunber = $product->ProductImages->count();
+        // $productImages = $product->ProductImages->take($nunber - $nunber % 3)->sortBy('position');
+        $productImages = $product->ProductImages->sortBy('position');
+
 
         $productCategory = $this->category->where('id', $product->category_id)->first();
         $productBrand = $this->brand->where('id', $product->brand_id)->first();
@@ -100,7 +100,7 @@ class ProductDetailController extends Controller
         foreach ($products_tags as $product_tag) {
             $products_id[] = $product_tag->product_id;
         }
-        // DB::enableQueryLog();
+        //DB::enableQueryLog();
         $products = $this->product->whereIn('id', $products_id)->where('active', 0)->latest()->paginate(6);
         // dd(DB::getQueryLog());
 
@@ -122,9 +122,19 @@ class ProductDetailController extends Controller
                     'product_category_html' => $product_category_html,
                     'paginate_html' => $paginate_html,
                 ]);
-            }
-            if ($request->price_range_min || $request->price_range_max) {
-                return $this->Price_range_Traits($request->price_range_min, $request->price_range_max, $products);
+            } else {
+                $price_range_min = $request->price_range_min;
+                $price_range_max = $request->price_range_max;
+                $products = $this->product->whereIn('id', $products_id)->where('active', 0)->whereBetween('price', [$price_range_min, $price_range_max])->latest()->paginate(6);
+                $product_category_html = view('shop.category.components.data', compact('products'))->render();
+                $paginate_html = view('components.paginate', compact('products'))->render();
+                return Response()->json([
+                    'status' => 200,
+                    'product_category_html' => $product_category_html,
+                    'paginate_html' => $paginate_html,
+                    'price_min' => $price_range_min,
+                    'price_max' => $price_range_max,
+                ]);
             }
         }
         return view('DetailProduct.TagsProduct.index', compact('products', 'categories', 'brands', 'ads', 'tag_name'));

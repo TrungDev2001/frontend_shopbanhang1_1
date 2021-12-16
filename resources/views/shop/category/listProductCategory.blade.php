@@ -48,8 +48,9 @@
 							<li><a href="">&raquo;</a></li>
 							{{ $products->links() }}
 						</ul> --}}
-						<div class="paginate_html" style="display: grid;">
-							@include('components.paginate')
+						<div class="paginate_html paginate_price_range_html" data-price_min="" data-price_max="" style="display: grid;">
+							{{-- @include('components.paginate') --}}
+							{{ $products->links() }}
 						</div>
 
 					</div><!--features_items-->
