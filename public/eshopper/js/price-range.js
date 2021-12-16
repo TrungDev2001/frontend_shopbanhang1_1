@@ -336,7 +336,7 @@
 					}
 				});
 			}
-			// console.log(price_range_min);
+			// console.log(price_range_min + 'aaa');
 			// console.log(price_range_max);
 			return false;
 		},
