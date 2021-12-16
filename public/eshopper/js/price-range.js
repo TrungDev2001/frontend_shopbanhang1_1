@@ -331,6 +331,7 @@
 							$('.paginate_html').html(response.paginate_html);
 							$('.paginate_html').attr('data-price_min', response.price_min);
 							$('.paginate_html').attr('data-price_max', response.price_max);
+							console.log('test-aaaaaa');
 						}
 					}
 				});
