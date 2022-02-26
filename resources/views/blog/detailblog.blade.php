@@ -99,7 +99,7 @@ $totalPrice = 0;
 					</div><!--/socials-share-->
 
 					<div class="media commnets">
-						<div class="fb-comments" data-href="{{ route('blog.detail', ['id' => $post->id, 'slug' => $post->slug]) }}" data-width="" data-numposts="5"></div>
+						<div class="fb-comments" data-href="{{ route('blog.detail', ['id' => $post->id, 'slug' => $post->slug]) }}" data-width="700" data-numposts="5"></div>
 					</div>
                 </div>
 				</div>

@@ -101,7 +101,7 @@
 										<li><a href=""><i class="fa fa-calendar-o"></i>{{ date('d/m/Y', strtotime(substr(date('Y-m-d H:i:s'), 0, 10))) }}</a></li>
 									</ul>
 
-									<div class="fb-comments" data-href="{{ $url_DetailProduct }}" data-width="800" data-numposts="10"></div>
+									{{-- <div class="fb-comments" data-href="{{ $url_DetailProduct }}" data-width="800" data-numposts="10"></div> --}}
 
 									<p><b id="titleRating">Đánh giá sao cho sản phẩm:</b></p>
 									<div style="display: flex;">

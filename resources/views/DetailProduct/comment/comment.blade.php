@@ -1,3 +1,6 @@
+<?php
+	$base_url = config('base_url.url_backend.url');
+?>
 <label for="exampleFormControlTextarea1">Đánh giá của sản phẩm:</label>
 <div id="dataComment">
     <div class="media">
@@ -21,7 +24,7 @@
                 <div class="media">
                     <div class="col-md-1">
                         <a class="pr" href="#">
-                            <img src="{{ asset('eshopper/images/product-details/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg') }}" alt="Generic placeholder image">
+                            <img src="{{ $base_url.asset('eshopper/images/product-details/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg') }}" alt="Generic placeholder image">
                         </a>
                     </div>
                     <div class="media-body col-md-11" style="padding-left: 23px;">
@@ -33,7 +36,7 @@
                 <div class="media">
                     <div class="col-md-1">
                         <a class="pr" href="#">
-                            <img src="{{ asset('eshopper/images/product-details/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg') }}" alt="Generic placeholder image">
+                            <img src="{{ $base_url.asset('eshopper/images/product-details/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg') }}" alt="Generic placeholder image">
                         </a>
                     </div>
                     <div class="media-body col-md-11" style="padding-left: 23px;">
@@ -60,7 +63,7 @@
     <div class="media">
         <div class="row">
             <div class="col-md-1">
-                <img class="mr" src="{{ asset('eshopper/images/product-details/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg') }}" alt="Generic placeholder image">
+                <img class="mr" src="{{ $base_url.asset('eshopper/images/product-details/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg') }}" alt="Generic placeholder image">
             </div>
             <div class="media-body col-md-11">
                 <h5 class="mt">Media heading</h5>

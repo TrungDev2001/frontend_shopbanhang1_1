@@ -26,8 +26,9 @@
 							@error('passwordLogin')
 								<div class="text-danger">{{ $message }}</div>
 							@enderror
-
-							<div class="g-recaptcha" data-sitekey="6LfHYKEcAAAAAN-_pe1ckUWAlCBZJt3sPcl9nnpx"></div>
+							<!-- CAPTCHA_KEY locahost: 6LfHYKEcAAAAAN-_pe1ckUWAlCBZJt3sPcl9nnpx-->
+							<!-- CAPTCHA_KEY heruku: 6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS-->
+							<div class="g-recaptcha" data-sitekey="6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS"></div>
 							<br/>
 							@if($errors->has('g-recaptcha-response'))
 							<span class="invalid-feedback text-danger" style="display:block">
@@ -64,7 +65,7 @@
 								<div class="alert alert-danger">{{ $message }}</div>
 							@enderror
 
-							<div class="g-recaptcha" data-sitekey="6LfHYKEcAAAAAN-_pe1ckUWAlCBZJt3sPcl9nnpx"></div>
+							<div class="g-recaptcha" data-sitekey="6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS"></div>
 							<br/>
 							@if($errors->has('g-recaptcha-response'))
 							<span class="invalid-feedback text-danger" style="display:block">

@@ -26,7 +26,9 @@ class Captcha implements Rule
      */
     public function passes($attribute, $value)
     {
-        $recaptcha = new ReCaptcha('6LfHYKEcAAAAACgsgin-UlBmpg_jIbdQ2wXxGePX');
+        //'CAPTCHA_SECRET Locahost: 6LfHYKEcAAAAACgsgin-UlBmpg_jIbdQ2wXxGePX
+        //'CAPTCHA_SECRET herpku: 6LeXoqAeAAAAAEWgo-1I1NPT1L5vuhLKssqryYfT
+        $recaptcha = new ReCaptcha('6LeXoqAeAAAAAEWgo-1I1NPT1L5vuhLKssqryYfT');
         $response = $recaptcha->verify($value, $_SERVER['REMOTE_ADDR']);
         return $response->isSuccess();
     }

@@ -23,6 +23,7 @@ class CommentController extends Controller
     }
     public function index(Request $request, $id)
     {
+        $base_url = config('base_url.url_backend.url');
         date_default_timezone_set("Asia/Ho_Chi_Minh");
         $date_current = strtotime(date('Y-m-d H:i:s'));
         $comments = $this->comment->where('product_id', $id)->where('parent_id', 0)->latest()->paginate(3);
@@ -45,6 +46,7 @@ class CommentController extends Controller
             } else {
                 $totalDiff = round($totalHoursDiff) . ' giờ trước';
             }
+
             $comments_html .= '
                 <div class="media" id="comments_' . $comment->id . '">
                     <div class="row">
