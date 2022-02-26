@@ -904,8 +904,8 @@ h2.title {
 }
 
 .carousel-inner img {
-    width: max-content;
-    height: 301px;
+    width: 460px;
+    height: 300px;
     object-fit: cover;
 }
 

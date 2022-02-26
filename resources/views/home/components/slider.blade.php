@@ -28,7 +28,7 @@
 								}
 							</style> --}}
 							<div class="col-sm-10">
-								<img src="{{$base_url.$slider->image_path_Sider}}" class="girl img-responsive" alt="" />
+								<img src="{{$base_url.$slider->image_path_Sider}}" style="width: max-content" class="girl img-responsive" alt="" />
 							</div>
 						</div>	
 						@endforeach
