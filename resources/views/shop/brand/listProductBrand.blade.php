@@ -8,7 +8,8 @@
 @section('content')
 	<section id="advertisement">
 		<div class="container">
-			<img src="/eshopper/images/shop/advertisement.jpg" alt="" />
+			{{-- <img src="/eshopper/images/shop/advertisement.jpg" alt="" /> --}}
+			<img src="/eshopper/images/shop/800-200-800x200-194.png" alt="" />
 		</div>
 	</section>
 	
