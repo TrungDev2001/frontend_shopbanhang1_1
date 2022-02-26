@@ -32,13 +32,15 @@
 		</div>
 	</section>
 
+@include('home.components.quickview_modal')
+@include('compareProduct.compareProduct')
+
 @endsection
 
 @section('js')
 	<script src="{{ asset('FrontEnd/detailProduct/quickview/index.js') }}"></script>
-
 	<script src="{{ asset('FrontEnd/Card/add/add_to_card.js') }}"></script>
-
+	<script src="{{ asset('FrontEnd/product/loadMoreProductHome.js') }}"></script>
 
 <script>
 	$.ajaxSetup({

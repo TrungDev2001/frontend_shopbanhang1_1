@@ -30,8 +30,8 @@ class BlogController extends Controller
     }
     public function index()
     {
-        $categoryPosts = $this->categoryPost->latest()->get();
-        $posts = $this->post->latest()->where('status', 0)->paginate(5);
+        $categoryPosts = $this->categoryPost->where('id', '<>', 11)->latest()->get();
+        $posts = $this->post->latest()->where('status', 0)->where('categoryPost_id', '<>', 11)->paginate(5);
         return view('blog.index', compact('categoryPosts', 'posts'));
     }
 
@@ -69,6 +69,7 @@ class BlogController extends Controller
         $categoryPost = $this->categoryPost->find($id);
         $categoryPosts = $this->categoryPost->latest()->get();
 
+
         return view('blog.listPostOfCategory', compact('posts', 'categoryPost', 'categoryPosts'));
     }
 
@@ -79,6 +80,10 @@ class BlogController extends Controller
         $categoryPosts = $this->categoryPost->latest()->get();
         $categoryPostRelateds = $this->post->where('categoryPost_id', $post->categoryPost_id)->whereNotIn('id', [$id])->latest()->take(4)->get();
         $PostUser = User::where('id', $post->user_id)->first();
+
+        $post->update([
+            'view_count' => $post->view_count + 1,
+        ]);
         return view('blog/detailblog', compact('post', 'categoryPosts', 'categoryPostRelateds', 'PostUser'));
     }
 

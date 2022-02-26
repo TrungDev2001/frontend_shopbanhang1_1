@@ -87,6 +87,8 @@
 	</section>
 	
 	@include('home.components.quickview_modal')
+	@include('compareProduct.compareProduct')
+
 @endsection
 
 @section('js')

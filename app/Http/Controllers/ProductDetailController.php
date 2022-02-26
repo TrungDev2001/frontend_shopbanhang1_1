@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\ProductTag;
 use App\Models\rating_star;
 use App\Models\Tag;
+use App\Models\Visitor;
 use App\Traits\filter_product_Traits;
 use App\Traits\price_range_Traits;
 use Illuminate\Support\Carbon;
@@ -36,7 +37,8 @@ class ProductDetailController extends Controller
     private $oderDetail;
     private $rating_star;
     private $comment;
-    public function __construct(Category $category, Brand $brand, Ads $ads, Product $product, Tag $tag, ProductTag $productTag, Oder $oder, OderDetail $oderDetail, rating_star $rating_star, Comment $comment)
+    private $visitor;
+    public function __construct(Category $category, Brand $brand, Ads $ads, Product $product, Tag $tag, ProductTag $productTag, Oder $oder, OderDetail $oderDetail, rating_star $rating_star, Comment $comment, Visitor $visitor)
     {
         $this->category = $category;
         $this->brand = $brand;
@@ -48,6 +50,7 @@ class ProductDetailController extends Controller
         $this->oderDetail = $oderDetail;
         $this->rating_star = $rating_star;
         $this->comment = $comment;
+        $this->visitor = $visitor;
     }
     public function index($id, $slug, Request $request)
     {
@@ -71,9 +74,13 @@ class ProductDetailController extends Controller
 
         $productRelates = $this->product->where('category_id', $product->category_id)->where('brand_id', $product->brand_id)->whereNotIn('id', [$product->id])->latest()->take(6)->get();
         //cập nhập view
-        $product->update([
-            'view_count' => $product->view_count + 1,
-        ]);
+        $visitor = $this->visitor->where('ip_address', $request->ip())->first();
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        if ($now->diffInMinutes($visitor->date_just_visiter) >= 2) {
+            $product->update([
+                'view_count' => $product->view_count + 1,
+            ]);
+        }
 
         if ($request->ajax()) {
             $quickview_html = view('DetailProduct.quickview.index', compact('categories', 'brands', 'ads', 'product', 'productImages', 'productBrand', 'url_DetailProduct', 'productRelates', 'productCategory'))->render();

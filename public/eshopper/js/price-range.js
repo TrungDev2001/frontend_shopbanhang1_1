@@ -331,7 +331,10 @@
 							$('.paginate_html').html(response.paginate_html);
 							$('.paginate_html').attr('data-price_min', response.price_min);
 							$('.paginate_html').attr('data-price_max', response.price_max);
-							console.log('test-aaaaaa');
+							$('#LoadMoreProduct').attr('data-price_min', response.price_range_min);
+							$('#LoadMoreProduct').attr('data-price_max', response.price_range_max);
+							$('#LoadMoreProduct').css('display', 'block');
+							window.pageProductHotAll = 2;
 						}
 					}
 				});

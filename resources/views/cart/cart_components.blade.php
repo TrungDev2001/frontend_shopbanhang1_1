@@ -14,7 +14,7 @@
             <h4><a href="">{{ $cart['name'] }} </a></h4>
         </td>
         <td class="cart_price">
-            <p>{{ number_format($cart['price']) }} VND</p>
+            <p>{{ number_format($cart['price'], 0, ',', '.') }}đ</p>
         </td>
         <td class="cart_quantity" data-url = {{ route('cart.update_cart', ['id' => $keyCart]) }}>
             <div class="cart_quantity_button">
@@ -24,12 +24,16 @@
             </div>
         </td>
         <td class="cart_total">
-            <p class="cart_total_price">{{ number_format($cart['price'] * $cart['quantity']) }} VND</p>
+            <p class="cart_total_price">{{ number_format($cart['price'] * $cart['quantity'], 0, ',', '.') }}đ</p>
         </td>
         <td class="cart_delete">
             <a class="cart_quantity_delete" data-url="{{ route('cart.delete_cart', ['id' => $keyCart]) }}"><i class="fa fa-times"></i></a>
         </td>
     </tr>
-@endforeach    
+@endforeach  
+@else  
+    <tr>
+        <td colspan="5" align="center">Chưa có sản phẩm nào.</td>
+    </tr>
 @endif
 

@@ -46,7 +46,6 @@ function paginate_url_item() {
                     $('#img-loading-content').css('display', 'none');
                     $('#data_product_category').html(response.product_category_html);
                     $('.paginate_html').html(response.paginate_html);
-                    console.log('paginate-filter');
                 }
             }
         });

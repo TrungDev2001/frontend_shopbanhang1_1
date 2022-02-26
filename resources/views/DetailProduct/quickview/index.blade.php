@@ -58,7 +58,17 @@
                 <input type="hidden" id="user_id" value="{{ Auth()->id() }}"> --}}
             </div>
             <span>
-                <span>{{ number_format($product->price, 0, ',', '.') }}đ</span>
+                @if ($product->promotional_price > 0)
+                    <div style="display: flex;">
+                        <p style="text-decoration-line: line-through;  margin-right: 10px;">{{ number_format($product->price, 0, ',', '.') }}đ</p>
+                        <p>-{{ round(($product->price - $product->promotional_price) / $product->price * 100) }}%</p>
+                    </div>
+                    <span>{{ number_format($product->promotional_price, 0, ',', '.') }}đ</span>
+                @else
+                    <span>{{ number_format($product->price, 0, ',', '.') }}đ</span>
+                @endif
+
+                
                 <label>Số lượng:</label>
                 <input id="quantity" type="number" min="1" value="1" />
                 <a data-url="{{ route('add_to_cart.index', ['id' => $product->id])}}" class="btn btn-fefault cart add-to-cart-detail">

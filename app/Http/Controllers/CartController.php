@@ -16,13 +16,17 @@ use App\Models\ThanhPho;
 use App\Models\TransportFee;
 use App\Models\Voucher;
 use App\Models\XaPhuong;
+use App\Traits\payment_Traits;
+use App\User;
 use DB;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class CartController extends Controller
 {
     // use SendEmailOderSuccessQueue;
+    use payment_Traits;
     private $product;
     private $oder;
     private $oderDetail;
@@ -48,6 +52,10 @@ class CartController extends Controller
     public function add_to_cart($id, Request $request)
     {
         $product = $this->product->find($id);
+        $product_price = $product->price;
+        if ($product->promotional_price != 0) {
+            $product_price = $product->promotional_price;
+        }
         if ($product->quantity_product != 0) {
             $cart = session()->get('cart');
             if (isset($cart[$id]['quantity'])) {
@@ -60,14 +68,14 @@ class CartController extends Controller
                 if (isset($request->quantity)) {
                     $cart[$id] = [
                         'name' => $product->name,
-                        'price' => $product->price,
+                        'price' => $product_price,
                         'image_path' => $product->feature_image_path,
                         'quantity' => $request->quantity
                     ];
                 } else {
                     $cart[$id] = [
                         'name' => $product->name,
-                        'price' => $product->price,
+                        'price' => $product_price,
                         'image_path' => $product->feature_image_path,
                         'quantity' => 1
                     ];
@@ -93,6 +101,7 @@ class CartController extends Controller
     public function show_cart()
     {
         //session()->flush('cart');
+        session()->forget('voucher');
         $carts = session()->get('cart');
         $thanhPhos = $this->thanhPho->get();
         return view('cart.cart', compact('carts', 'thanhPhos'));
@@ -130,8 +139,8 @@ class CartController extends Controller
     public function checkout()
     {
         $thanhPhos = $this->thanhPho->get();
-        $carts = session()->get('cart');
-        return view('cart.checkout', compact('carts', 'thanhPhos'));
+        // $carts = session()->get('cart');
+        return view('cart.checkout', compact('thanhPhos'));
     }
     public function payment(CheckoutValidate $request)
     {
@@ -145,12 +154,28 @@ class CartController extends Controller
         $priceShip = session()->get('priceShip');
 
         $totalPrice = 0;
-        $totalQuantity = 0;
+
         $carts = session()->get('cart');
+        // dd($carts);
         foreach ($carts as $cart) {
             $totalPrice += $cart['quantity'] * $cart['price'];
         }
         session()->put('totalPrice', $totalPrice); //tổng giá đơn hàng
+        //giá trị voucher
+        $priceVoucher = 0;
+        if (isset($voucher)) {
+            if ($voucher->type == 0) {
+                if ($voucher->numberMax > 0) {
+                    $priceVoucher = $voucher->numberMax;
+                } else {
+                    $priceVoucher = ($totalPrice * $voucher->number / 100);
+                }
+            } else {
+                $priceVoucher = $voucher->number;
+            }
+        }
+        $priceEnd = $totalPrice + $priceShip - $priceVoucher;
+
         $data_Oder = [
             'user_id' => Auth()->id(),
             'name' => $request->name,
@@ -165,45 +190,28 @@ class CartController extends Controller
             'payment' => $request->payment,
             'total_price' => $totalPrice,
         ];
-        $oder_id = $this->oder->create($data_Oder);
 
-        foreach ($carts as $product_id => $cart) {
-            $totalQuantity += $cart['quantity'];
-
-            $product = $this->product->find($product_id);
-            $data_Oder_Detail = [
-                'oder_id' => $oder_id->id,
-                'product_id' => $product_id,
-                'image_path' => $product->feature_image_path,
-                'name' => $product->name,
-                'price' => $product->price,
-                'quantity' => $cart['quantity'],
-            ];
-            $this->oderDetail->create($data_Oder_Detail);
-
-            session()->put('totalQuantity', $totalQuantity); //đếm số hàng có trong giỏ
+        if ($request->payment == 'Tiền mặt') {
+            return $this->Payment_Traits($data_Oder, $carts, $voucher_id);
+        } elseif ($request->payment == 'PayPal') {
+            $priceDolla = round($priceEnd / 22830, 2);
+            return redirect()->route('processTransaction', compact('priceDolla', 'data_Oder', 'carts', 'voucher_id'));
+        } elseif ($request->payment == 'VNPAY') {
+            session()->put('data_Oder', $data_Oder);
+            session()->put('carts', $carts);
+            session()->put('voucher_id', $voucher_id);
+            return view('cart.VNPAY.transaction', compact('priceEnd'));
         }
-
-        if (isset($voucher)) {
-            $this->voucher->find($voucher_id)->update([
-                'quantity' => $voucher->quantity - 1, //giảm số lượng voucher khi đặt hàng thành công
-            ]);
-        }
-
-        session()->forget('cart');
-        session()->forget('voucher');
-        session()->forget('priceShip');
-        return redirect()->route('cart.paymentSuccess');
     }
     public function paymentSuccess()  //giui email
     {
         $Oder_id = $this->oder->where('user_id', Auth()->id())->latest()->first();
 
-        if (Auth::user()->email != '') {
+        $to_email = Auth::user()->email; //gủi đến email người dùng
+        if ($to_email != '') {
             // $this->SentMailSuccess();
             $from_name = "P-Shopper";
             $from_email = "nobita9cs6vk@gmail.com"; //gửi từ email
-            $to_email = Auth::user()->email; //gủi đến email người dùng
 
             $content_email = [
                 'name' => 'Đặt hàng thành công.',
@@ -240,19 +248,48 @@ class CartController extends Controller
     //mã giảm giá
     public function coupon_code(Request $request)
     {
+        // session()->forget('voucher');
         $codeCoupon = $request->data_coupon_code;
-        $voucher = $this->voucher->where('code', $codeCoupon)->first();
+        $query = $this->voucher->where('code', $codeCoupon);
+        $voucher = $query->first();
+        $now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y');
+        $viewTotalPriceRender = '';
+
         $messageCoupon = -1;
         if (isset($voucher)) {
-            $messageCoupon = $voucher->quantity;
-        }
-        if ($voucher->quantity > 0) {
-            session()->put('voucher', $voucher);
-        } else {
             session()->forget('voucher');
+            $user_id_crrent = Auth()->id();
+            $count_user_id_crrent = 0;
+
+            if ($voucher->quantity_use_of_user == 1) { //kiểm tra xem KH đã sử dụng chưa. Trường hợp mã giảm giá mỗi người chỉ sử dụng 1 lần sử dụng
+                $checkUseVoucher = $query->where('user_id', 'LIKE', '%' . $user_id_crrent . '%')->first();
+            } else {  //kiểm tra xem KH đã sử dụng chưa. Trường hợp mã giảm giá mỗi người sử dụng được nhiều hơn 1 lần sử dụng
+                $user_ids = explode(' ', $voucher->user_id);
+                foreach ($user_ids as $user_id) {
+                    if ($user_id == $user_id_crrent) {
+                        $count_user_id_crrent += 1;
+                    }
+                }
+                // dd($user_ids);
+            }
+
+            if ($user_id_crrent == null) {
+                $messageCoupon = -6; //người dùng chưa đăng nhập
+            } elseif ($voucher->status == 1) {
+                $messageCoupon = -2; //mã chưa kích hoạt
+            } elseif ($now < $voucher->date_start) {
+                $messageCoupon = -3; //mã chưa đến hạn
+            } elseif ($now > $voucher->date_end) {
+                $messageCoupon = -4; //mã đã hết hạn
+            } elseif ($count_user_id_crrent >= $voucher->quantity_use_of_user || isset($checkUseVoucher)) {
+                $messageCoupon = -5; //người dùng này đã hết lượt sử dụng
+            } else {
+                session()->put('voucher', $voucher);
+                $messageCoupon = $voucher->quantity;
+            }
+            $carts = session()->get('cart');
+            $viewTotalPriceRender = view('cart.components.totalPrice', compact('carts'))->render();
         }
-        $carts = session()->get('cart');
-        $viewTotalPriceRender = view('cart.components.totalPrice', compact('carts', 'voucher'))->render();
         return Response()->json([
             'code' => 200,
             'viewTotalPriceRender' => $viewTotalPriceRender,

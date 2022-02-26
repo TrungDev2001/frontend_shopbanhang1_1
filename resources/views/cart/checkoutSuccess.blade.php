@@ -110,7 +110,7 @@
                                 <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
                                     <tr>
                                         <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 36px; font-weight: 800; line-height: 48px;" class="mobile-center">
-                                            <h1 style="font-size: 36px; font-weight: 800; margin: 0; color: #ffffff;">P-Shopper</h1>
+                                            <h1 style="font-size: 36px; font-weight: 800; margin: 0; color: #ffffff;">Thương mại điện tử</h1>
                                         </td>
                                     </tr>
                                 </table>
@@ -155,15 +155,43 @@
                                             </tr>
                                             <tr>
                                                 <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> Mặt hàng đã mua ({{ session()->get('totalQuantity') }}) </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> {{ session()->get('totalPrice') }} VND </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;"> {{ number_format(session()->get('totalPrice'), 0, ',', '.') }}đ </td>
                                             </tr>
                                             <tr>
                                                 <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Vận chuyển + Xử lý </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Free </td>
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> +{{ number_format($Oder_id->priceShip, 0, ',', '.') }}đ </td>
                                             </tr>
                                             <tr>
-                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Thuế doanh thu </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Free </td>
+                                                <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> Mã khuyến mãi </td>
+                                                @php
+                                                    $endPrice0 = session()->get('totalPrice');
+                                                    $priceVoucher = 0;
+                                                    if($Oder_id->Voucher){
+                                                        if ($Oder_id->Voucher->type == 0) {
+                                                            if($Oder_id->Voucher->numberMax > 0){
+                                                                $priceVoucher = $Oder_id->Voucher->numberMax;
+                                                            }else{
+                                                                $priceVoucher = ($endPrice0 * $Oder_id->Voucher->number / 100);
+                                                            }
+                                                        } else {
+                                                            $priceVoucher = $Oder_id->Voucher->number;
+                                                        }
+                                                    }
+                                                @endphp
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> 
+                                                    @if($Oder_id->Voucher)
+                                                        -{{ $Oder_id->Voucher ? number_format($priceVoucher, 0, ',', '.') : '' }}đ (
+                                                        {{-- {{ $Oder_id->Voucher ? $Oder_id->Voucher->name : 'Không có' }} --}}
+                                                        @if ($priceVoucher > 0 && $Oder_id->Voucher->type == 0)
+                                                            Mã giảm giá {{$Oder_id->Voucher->number}}%
+                                                        @else
+                                                            Mã giảm giá {{$Oder_id->Voucher->number}}
+                                                        @endif
+                                                        {{ $Oder_id->Voucher->numberMax > 0 ? 'tối đa '.number_format($Oder_id->Voucher->numberMax, 0, ',', '.').'đ' : '' }})
+                                                    @else
+                                                        Không có
+                                                    @endif
+                                                </td>
                                             </tr>
                                         </table>
                                     </td>
@@ -173,7 +201,8 @@
                                         <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                             <tr>
                                                 <td width="75%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> Thành tiền </td>
-                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> {{ session()->get('totalPrice') }} VND </td>
+
+                                                <td width="25%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> {{ number_format($endPrice0-$priceVoucher+$Oder_id->priceShip, 0, ',', '.') }}đ </td>
                                             </tr>
                                         </table>
                                     </td>
@@ -191,7 +220,7 @@
                                                 <tr>
                                                     <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
                                                         <p style="font-weight: 800;">Địa chỉ giao hàng</p>
-                                                        <p>{{$Oder_id->address}}<br><br></p>
+                                                        <p>{{$Oder_id->sonha}}-{{$Oder_id->XaPhuong->name}}-{{$Oder_id->QuanHuyen->name}}-{{$Oder_id->ThanhPho->name}}<br><br></p>
                                                     </td>
                                                 </tr>
                                             </table>

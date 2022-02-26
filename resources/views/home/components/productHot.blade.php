@@ -16,7 +16,14 @@
 								<div class="productinfo text-center">
 									<a href="{{ route('ProductDetail', ['id' => $productHot->id, 'slug' => $productHot->slug]) }}">
 										<img class="ImageproductHot" src="{{ $base_url.$productHot->feature_image_path }}" style="width: 165px; height: 182px; object-fit: cover;" alt="{{ $productHot->feature_image_name }}" />
-										<h2>{{ number_format($productHot->price,0,',','.') }}đ</h2>
+										@if ($productHot->promotional_price != 0)
+                                            <div>
+                                                <p style="display: inline-block; padding-right: 5px;     text-decoration-line: line-through;">{{ number_format($productHot->price, 0, ',', '.') }}đ</p><span>-{{ round(($productHot->price - $productHot->promotional_price) / $productHot->price * 100) }}%</span>
+                                            </div>
+                                            <h2 style="margin-top: 0px;">{{ number_format($productHot->promotional_price, 0, ',', '.') }}đ</h2>
+                                        @else
+                                            <h2 style="margin-top: 30px;">{{ number_format($productHot->price, 0, ',', '.') }}đ</h2>
+                                        @endif
 										<p>{{ Str::words($productHot->name, 6) }}</p>
 									</a>
 									{{-- <a data-url="{{ route('add_to_cart.index', ['id' => $productHot->id])}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a> --}}

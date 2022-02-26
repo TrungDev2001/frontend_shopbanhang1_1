@@ -11,7 +11,14 @@
                         <div class="productinfo text-center productNew">
                             <a href="{{ route('ProductDetail', ['id' => $product->id, 'slug' => $product->slug]) }}">
                                 <img src="{{$base_url.$product->feature_image_path}}" class="image" alt="" />
-                                <h2>{{ number_format($product->price, 0, ',', '.') }}đ</h2>
+                                @if ($product->promotional_price != 0)
+                                    <div>
+                                        <p style="display: inline-block; padding-right: 5px;     text-decoration-line: line-through;">{{ number_format($product->price, 0, ',', '.') }}đ</p><span>-{{ round(($product->price - $product->promotional_price) / $product->price * 100) }}%</span>
+                                    </div>
+                                    <h2 style="margin-top: 0px;">{{ number_format($product->promotional_price, 0, ',', '.') }}đ</h2>
+                                @else
+                                    <h2 style="margin-top: 30px;">{{ number_format($product->price, 0, ',', '.') }}đ</h2>
+                                @endif
                                 <p>{{ Str::words($product->name,6) }}</p>
                             </a>
                             <div style="display: flex;">
@@ -23,20 +30,31 @@
                             </div>
                         </div>
                         <img src="{{date('Y-m-d') == $product->created_at->format('Y-m-d') ? '/eshopper/images/home/new.png' : '#'}}" class="new" alt="" />
+                        <img src="{{$product->promotional_price != 0 ? '/eshopper/images/home/sale.png' : '#'}}" class="sale" alt="" />
                 </div>
                 <div class="choose">
                     <ul class="nav nav-pills nav-justified">
-                        <li><a href="#"><i class="fa fa-plus-square"></i>Yêu thích</a></li>
-                        <li><a href="#"><i class="fa fa-plus-square"></i>So sánh</a></li>
+                        <li><a href="#" class="btn-add-wishlist compareProduct_{{ $product->id }}" 
+                            data-product_id="{{ $product->id }}"
+                            data-product_name="{{ Str::words($product->name, 9) }}"
+                            data-product_price="{{ number_format( $product->promotional_price > 0 ? $product->promotional_price : $product->price, 0, ',', '.') }}"
+                            data-feature_image_path="{{ $base_url.$product->feature_image_path }}"
+                            data-url_DetailProduct="{{ route('ProductDetail', ['id' => $product->id, 'slug' => $product->slug]) }}"
+                            data-url_addToCard="{{ route('add_to_cart.index', ['id' => $product->id])}}"
+                            ><i class="fa fa-plus-square"></i>Yêu thích</a>
+                        </li>
+                        <li><a data-product_id="{{ $product->id }}" class="compareProduct" data-toggle="modal" data-target=".compareProduct1"><i class="fa fa-plus-square"></i>So sánh</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         @endforeach
     </div>
-    <img id="img-loading-content" src="{{ asset('eshopper\images\loding-gif\loading5.gif') }}" style="width: 200px;margin-left: auto; margin-right: auto; display: none;" alt="">
-    <div class="clearfix">...</div>
 
+    <div class="clearfix"></div>
+    <img id="img-loading-content" src="{{ asset('eshopper\images\loding-gif\loading5.gif') }}" style="width: 200px;margin-left: auto; margin-right: auto; display: none;" alt="">
+    <div align="center" class="test1">
+        <p id="LoadMoreProduct" style="font-weight: bold; cursor: pointer; color: #5bc0de; font-size: large; border: 1px solid; width: max-content; border-radius: 20px; padding: 5px;">Xem thêm</p>
+    </div>
 </div><!--features_items-->
 
-@include('home.components.quickview_modal')

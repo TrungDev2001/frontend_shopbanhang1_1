@@ -1,5 +1,6 @@
 @if (session()->has('cart'))
     @php
+        $carts = session()->get('cart');
         $totalPrice = 0;
         if (session()->get('voucher')) {
             $voucher = session()->get('voucher');
@@ -15,13 +16,17 @@
     @if (isset($voucher->number) && $voucher->quantity>0)
         @php
             if ($voucher->type=='%') {
-                $pricePhanTram = $totalPrice*$voucher->number/100;
+                if($voucher->numberMax>0){
+                    $pricePhanTram = $voucher->numberMax;
+                }else{
+                    $pricePhanTram = $totalPrice*$voucher->number/100;
+                }
             }else{
                 $priceTien = $voucher->number;
             }
         @endphp
         @if ($voucher->type=='%')
-            <li>Mã khuyến mãi {{$voucher->number}}%<span>-{{ number_format($pricePhanTram,0,',','.') }}đ</span></li>
+            <li>Mã khuyến mãi {{$voucher->number}}% {{ $voucher->numberMax>0 ? '(Tối đa '.number_format($voucher->numberMax,0,',','.').'đ)' : '' }}<span>-{{ number_format($pricePhanTram,0,',','.') }}đ</span></li>
         @else
             <li>Mã khuyến mãi {{number_format($voucher->number,0,',','.')}}đ<span>-{{ number_format($priceTien,0,',','.') }}đ</span></li>
         @endif

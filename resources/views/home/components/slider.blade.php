@@ -1,5 +1,6 @@
 <?php
 	$base_url = config('base_url.url_backend.url');
+	// $base_url = 'http://localhost:8000/';
 ?>
 <section id="slider"><!--slider-->
 	<div class="container">

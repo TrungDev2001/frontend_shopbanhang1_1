@@ -13,27 +13,6 @@ $totalPrice = 0;
                 <div class="left-sidebar">
                     <h2>Danh mục bài viết</h2>
                     <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                        {{-- <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-                                        <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                        Sportswear
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="sportswear" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <ul>
-                                        <li><a href="">Nike </a></li>
-                                        <li><a href="">Under Armour </a></li>
-                                        <li><a href="">Adidas </a></li>
-                                        <li><a href="">Puma</a></li>
-                                        <li><a href="">ASICS </a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div> --}}
                         @foreach ($categoryPosts as $categoryPost)
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -44,9 +23,9 @@ $totalPrice = 0;
                     </div><!--/category-products-->
             
                     
-                    <div class="shipping text-center"><!--shipping-->
+                    {{-- <div class="shipping text-center"><!--shipping-->
                         <img src="images/home/shipping.jpg" alt="" />
-                    </div><!--/shipping-->
+                    </div><!--/shipping--> --}}
                 </div>
             </div>
             <div class="col-sm-9">
@@ -83,12 +62,6 @@ $totalPrice = 0;
                     @endforeach
                     <div class="pagination-area">
                         {{ $posts->links() }}
-                        {{-- <ul class="pagination">
-                            <li><a href="" class="active">1</a></li>
-                            <li><a href="">2</a></li>
-                            <li><a href="">3</a></li>
-                            <li><a href=""><i class="fa fa-angle-double-right"></i></a></li>
-                        </ul> --}}
                     </div>
                 </div>
             </div>

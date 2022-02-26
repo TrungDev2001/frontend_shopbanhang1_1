@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\VNPAYController;
 
 
 /*
@@ -82,6 +84,25 @@ Route::prefix('home')->group(function () {
         'as' => 'home.header.search_product_result',
         'uses' => 'HomeController@search_product_result'
     ]);
+    Route::get('wishlist', [
+        'as' => 'home.header.wishlist',
+        'uses' => 'HomeController@wishlist'
+    ]);
+    Route::get('/bought', [
+        'as' => 'home.header.bought',
+        'uses' => 'HomeController@bought',
+        'middleware' => 'CheckLogin'
+    ]);
+    Route::get('/bought/show/{id}', [
+        'as' => 'home.header.show_bought',
+        'uses' => 'HomeController@show_bought',
+        'middleware' => 'CheckLogin'
+    ]);
+    Route::delete('/bought/delete/{id}', [
+        'as' => 'home.header.delete_bought',
+        'uses' => 'HomeController@delete_bought',
+        'middleware' => 'CheckLogin'
+    ]);
 });
 Route::prefix('shop')->group(function () {
     Route::get('/video', [
@@ -149,6 +170,16 @@ Route::prefix('Cart')->group(function () {
         'uses' => 'CartController@fetchPriceShip'
     ]);
 });
+// Thanh toán paypal
+Route::get('create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
+Route::get('process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
+Route::get('success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
+Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
+// Thanh toán VNPAY
+Route::post('VNPAY-transaction', [VNPAYController::class, 'processVNPAY'])->name('processVNPAY');
+Route::get('vnpay_php/vnpay_return', [VNPAYController::class, 'vnpay_return'])->name('vnpay_return');
+
+
 Route::prefix('blog')->group(function () {
     Route::get('/', [
         'as' => 'blog.index',
@@ -165,6 +196,16 @@ Route::prefix('blog')->group(function () {
     Route::get('/tag/{id}/{tagName}', [
         'as' => 'blog.tag',
         'uses' => 'BlogController@postTag',
+    ]);
+});
+Route::prefix('contact')->group(function () {
+    Route::get('/', [
+        'as' => 'contact.index',
+        'uses' => 'ContactController@index'
+    ]);
+    Route::post('/store', [
+        'as' => 'contact.store',
+        'uses' => 'ContactController@store'
     ]);
 });
 Route::prefix('authentication')->group(function () {

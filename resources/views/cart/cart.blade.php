@@ -155,16 +155,29 @@ $totalPrice = 0;
             url: url,
             data: {data_coupon_code: data_coupon_code},
             success: function (response) {
-                $('#totalPrice').html(response.viewTotalPriceRender);
-                if(response.messageCoupon == 0){
-                    $('.messageCoupon').html('Mã khuyến mại đã hết.');
-                }
-                if(response.messageCoupon < 0){
-                    $('.messageCoupon').html('Mã khuyến mại không đúng.');
-                }
-                if(response.messageCoupon > 0){
-                    $('.messageCoupon').html('');
-                }
+                if(response.code == 200){
+                    // $('#totalPrice').html('');
+                    if(response.viewTotalPriceRender != ''){
+                        $('#totalPrice').html(response.viewTotalPriceRender);
+                    }
+                    if(response.messageCoupon == 0){
+                        $('.messageCoupon').html('Mã khuyến mại đã hết.');
+                    }else if(response.messageCoupon == -1){
+                        $('.messageCoupon').html('Mã khuyến mại không đúng.');
+                    }else if(response.messageCoupon > 0){
+                        $('.messageCoupon').html('');
+                    }else if(response.messageCoupon == -2){
+                        $('.messageCoupon').html('Mã khuyến mãi này chưa được kích hoạt');
+                    }else if(response.messageCoupon == -3){
+                        $('.messageCoupon').html('Mã khuyến mãi này chưa đến ngày sử dụng');
+                    }else if(response.messageCoupon == -4){
+                        $('.messageCoupon').html('Mã khuyến mãi này đã hết hạn sử dụng');
+                    }else if(response.messageCoupon == -5){
+                        $('.messageCoupon').html('Mã khuyến mãi này bạn đã sử dụng hết lượt');
+                    }else if(response.messageCoupon == -6){
+                        $('.messageCoupon').html('Vui lòng đăng nhập để nhập mã giảm giá');
+                    }
+                }   
             }
         });
     })

@@ -14,7 +14,7 @@
         <link href="{{asset('eshopper/css/animate.css')}}" rel="stylesheet">
         <link href="{{asset('eshopper/css/main.css')}}" rel="stylesheet">
         <link href="{{asset('eshopper/css/responsive.css')}}" rel="stylesheet">
-        <link rel="shortcut icon" href="{{asset('')}}eshopper/images/ico/favicon.ico">
+        <link rel="shortcut icon" href="{{asset('eshopper/images/home/logo1.png')}}">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{asset('eshopper/images/ico/apple-touch-icon-144-precomposed.png')}}">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{asset('eshopper/images/ico/apple-touch-icon-114-precomposed.png')}}">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{asset('eshopper/images/ico/apple-touch-icon-72-precomposed.png')}}">
@@ -39,6 +39,10 @@
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script src="{{ asset('FrontEnd/header/search/search.js') }}"></script>
+
+        <script src="{{ asset('FrontEnd/product/add_wishlist.blade.js') }}"></script> {{-- sản phẩm yêu thích--}}
+        <script src="{{ asset('FrontEnd/detailProduct/productWatched/productWatched.js') }}"></script> {{-- sản phẩm đã xem --}}
+        <script src="{{ asset('FrontEnd/product/compareProduct.js') }}"></script> {{-- so sánh sản phẩm --}}
         
         @yield('js')
 

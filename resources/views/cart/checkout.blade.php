@@ -39,31 +39,31 @@
 					</thead>
 					<tbody>
                         @if (session()->has('cart'))
-                        @foreach ($carts as $keyCart => $cart)
-                        @php
-                            $base_url = 'http://localhost:8000/';
-                            $totalPrice +=  $cart['price'] * $cart['quantity'];
-                        @endphp
-                            <tr>
-                                <td class="cart_product">
-                                    <a href=""><img src="{{ $base_url.$cart['image_path'] }}" alt=""></a>
-                                </td>
-                                <td class="cart_description">
-                                    <h4><a href="">{{ $cart['name'] }} </a></h4>
-                                </td>
-                                <td class="cart_price">
-                                    <p>{{ number_format($cart['price']) }} VND</p>
-                                </td>
-                                <td class="cart_quantity" data-url = {{ route('cart.update_cart', ['id' => $keyCart]) }}>
-                                    <div class="cart_quantity_button">
-                                        <input style="width: 60px;" class="cart_quantity_input" type="number" id="quantity" name="quantity" value="{{ $cart['quantity'] }}" min="1" autocomplete="off" size="1">
-                                    </div>
-                                </td>
-                                <td class="cart_total">
-                                    <p class="cart_total_price">{{ number_format($cart['price'] * $cart['quantity']) }} VND</p>
-                                </td>
-                            </tr>
-                        @endforeach    
+							@foreach (session()->get('cart') as $keyCart => $cart)
+								@php
+									$base_url = 'http://localhost:8000/';
+									$totalPrice +=  $cart['price'] * $cart['quantity'];
+								@endphp
+									<tr>
+										<td class="cart_product">
+											<a href=""><img src="{{ $base_url.$cart['image_path'] }}" alt=""></a>
+										</td>
+										<td class="cart_description">
+											<h4><a href="">{{ $cart['name'] }} </a></h4>
+										</td>
+										<td class="cart_price">
+											<p>{{ number_format($cart['price']) }} VND</p>
+										</td>
+										<td class="cart_quantity" data-url = {{ route('cart.update_cart', ['id' => $keyCart]) }}>
+											<div class="cart_quantity_button">
+												<input style="width: 60px;" class="cart_quantity_input" type="number" id="quantity" name="quantity" value="{{ $cart['quantity'] }}" min="1" autocomplete="off" size="1">
+											</div>
+										</td>
+										<td class="cart_total">
+											<p class="cart_total_price">{{ number_format($cart['price'] * $cart['quantity']) }} VND</p>
+										</td>
+									</tr>
+							@endforeach    
                         @endif
                             <tr>
                                 <td colspan="4">&nbsp;</td>
@@ -98,6 +98,16 @@
 			<div class="shopper-informations">
 				<div class="row">
 					<div class="col-sm-12">
+
+						@if(\Session::has('error'))
+							<div class="alert alert-danger">{{ \Session::get('error') }}</div>
+							{{ \Session::forget('error') }}
+						@endif
+						@if(\Session::has('success'))
+							<div class="alert alert-success">{{ \Session::get('success') }}</div>
+							{{ \Session::forget('success') }}
+						@endif
+
 						<div class="shopper-info">
 							<p>Thông tin người mua hàng</p>
 							<form method="POST" action="{{ route('cart.payment') }}">
@@ -159,13 +169,14 @@
 								<div style="margin: 5px 0px; display: inline-flex;" class="payment-options">
 									<p style="margin-right: 20px;">Phương thức thanh toán:</p>
 									<span>
-										<label><input type="radio" value="Tiền mặt" name="payment" class="@error('payment') is-invalid @enderror"> Thanh toán bằng tiền mặt</label>
+										<label><input type="radio" value="Tiền mặt" name="payment" class="@error('payment') is-invalid @enderror"> Thanh toán khi nhận hàng</label>
 											@error('payment')
 												<div class="text-danger">{{ $message }}</div>
 											@enderror
 									</span>
 									<span>
-										<label><input type="radio" value="ATM" name="payment"> Thanh toán bằng ATM</label>
+										<label><input type="radio" value="PayPal" name="payment">PayPal</label>
+										<label><input type="radio" value="VNPAY" name="payment">VNPAY</label>
 									</span>
 								</div>
 								<button class="btn btn-primary" type="submit" style="display: block;">Đặt hàng</button>
