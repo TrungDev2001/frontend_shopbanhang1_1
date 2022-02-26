@@ -27,7 +27,7 @@ class LoginValidator extends FormRequest
         return [
             'emailLogin' => 'required',
             'passwordLogin' => 'required',
-            'g-recaptcha-response' => new Captcha(),         //dòng kiểm tra Captcha
+            //'g-recaptcha-response' => new Captcha(),         //dòng kiểm tra Captcha
         ];
     }
     public function messages()

@@ -28,13 +28,13 @@
 							@enderror
 							<!-- CAPTCHA_KEY locahost: 6LfHYKEcAAAAAN-_pe1ckUWAlCBZJt3sPcl9nnpx-->
 							<!-- CAPTCHA_KEY heruku: 6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS-->
-							<div class="g-recaptcha" data-sitekey="6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS"></div>
+							{{-- <div class="g-recaptcha" data-sitekey="6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS"></div>
 							<br/>
 							@if($errors->has('g-recaptcha-response'))
 							<span class="invalid-feedback text-danger" style="display:block">
 								<strong>{{$errors->first('g-recaptcha-response')}}</strong>
 							</span>
-							@endif
+							@endif --}}
 
 							<span>
 								<input type="checkbox" class="checkbox"> 
@@ -65,13 +65,13 @@
 								<div class="alert alert-danger">{{ $message }}</div>
 							@enderror
 
-							<div class="g-recaptcha" data-sitekey="6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS"></div>
+							{{-- <div class="g-recaptcha" data-sitekey="6LeXoqAeAAAAAOmebLh5CJe07ron872Wnr7R_NgS"></div>
 							<br/>
 							@if($errors->has('g-recaptcha-response'))
 							<span class="invalid-feedback text-danger" style="display:block">
 								<strong>{{$errors->first('g-recaptcha-response')}}</strong>
 							</span>
-							@endif
+							@endif --}}
 
 							<button type="submit" class="btn btn-default">Đăng kí</button>
 						</form>
